@@ -13,8 +13,8 @@ static void ext4_make_node(struct ext4_ctx* ctx, vfs_node_t* n, uint32_t ino, ui
 // Generic-address-space glue for regular files (backing callbacks + ops).
 static int ext4_back_read (void* owner, uint32_t ino, uint32_t off, uint32_t size, char* buf);
 static int ext4_back_write(void* owner, uint32_t ino, uint32_t off, uint32_t size, char* buf);
-static int ext4_ops_read  (vfs_node_t* node, uint32_t off, uint32_t size, char* buf);
-static int ext4_ops_write (vfs_node_t* node, uint32_t off, uint32_t size, char* buf);
+static int ext4_ops_read  (vfs_node_t* node, uint64_t off, uint32_t size, char* buf);
+static int ext4_ops_write (vfs_node_t* node, uint64_t off, uint32_t size, char* buf);
 static int ext4_ops_mmap_backing(vfs_node_t* node, uint32_t off, uint32_t len,
                                  int* backing, uint32_t* obj_off);
 
@@ -268,12 +268,12 @@ static void ext4_as_prepare(vfs_node_t* node) {
     vfs_as_setsize(node->priv, node->inode, node->size);
 }
 
-static int ext4_ops_read(vfs_node_t* node, uint32_t off, uint32_t size, char* buf) {
+static int ext4_ops_read(vfs_node_t* node, uint64_t off, uint32_t size, char* buf) {
     ext4_as_prepare(node);
     return vfs_as_read(node->priv, node->inode, off, size, buf);
 }
 
-static int ext4_ops_write(vfs_node_t* node, uint32_t off, uint32_t size, char* buf) {
+static int ext4_ops_write(vfs_node_t* node, uint64_t off, uint32_t size, char* buf) {
     ext4_as_prepare(node);
     int w = vfs_as_write(node->priv, node->inode, off, size, buf);
     if (w > 0) {
