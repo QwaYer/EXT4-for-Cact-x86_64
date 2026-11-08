@@ -2,8 +2,8 @@
 # ext4 module — Meson build system
 # ==============================================================================
 #
-#   meson setup build-meson --cross-file cross/i686-cact-clang.ini \
-#       -Dkern_root=../CactKernel-x86_32 -Dlocal_repo=../LocalRepoCactOS-x86_32
+#   meson setup build-meson --cross-file cross/x86_64-cact-clang.ini \
+#       -Dkern_root=../CactKernel-x86_64 -Dlocal_repo=../LocalRepoCactOS-x86_64
 #   ninja -C build-meson          # build-meson/ext4.cctk
 #   ninja -C build-meson stage    # copy into <local_repo>/lib
 #
@@ -77,7 +77,7 @@ foreach s : ext4_sources
   ext4_objs += custom_target('obj-' + s.underscorify(),
     input: s,
     output: s + '.o',
-    command: cc.cmd_array() + ['-m32'] + mod_c_args +
+    command: cc.cmd_array() + ['-m64'] + mod_c_args +
              ['-MD', '-MF', '@DEPFILE@', '-c', '@INPUT@', '-o', '@OUTPUT@'],
     depfile: s + '.o.d')
 endforeach
@@ -85,7 +85,7 @@ endforeach
 ext4_cctk = custom_target('ext4.cctk',
   input: ext4_objs,
   output: 'ext4.cctk',
-  command: [ld, '-m', 'elf_i386', '-r', '-o', '@OUTPUT@'] + ext4_objs,
+  command: [ld, '-m', 'elf_x86_64', '-r', '-o', '@OUTPUT@'] + ext4_objs,
   build_by_default: true)
 
 # Meson reserves the name "install" for itself, hence "stage".
