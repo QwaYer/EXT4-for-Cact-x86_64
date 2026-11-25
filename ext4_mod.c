@@ -2,7 +2,7 @@
  * Loadable ext4 filesystem for Cact kmod.
  *
  * Compiled as a relocatable ELF (ET_REL) and shipped as `ext4.cctk` inside
- * cctkfs.img. The kernel filesystem-module loader (fs_mod) loads this image,
+ * localbinrepo.img. The kernel filesystem-module loader (fs_mod) loads this image,
  * relocates it, and resolves the exported `fs_mount` / `fs_unmount` symbols.
  * mntfs then uses `fs_mount(dev)` to mount an ext4 volume that lives on a
  * whole disk or on a single partition (dev carries the LBA offset).
